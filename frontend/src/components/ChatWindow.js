@@ -7,6 +7,7 @@ export default function ChatWindow() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [fileInfo, setFileInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const endRef = useRef(null);
 
   // auto-scroll each time messages change
@@ -47,10 +48,11 @@ export default function ChatWindow() {
   const uploadId = fileInfo?.upload_id;
 
   const sendQuestion = async () => {
-    if (!input.trim() || !uploadId) return;
+    if (!input.trim() || !uploadId || isLoading) return;
     const question = input.trim();
     setMessages((m) => [...m, { role: "user", content: question }]);
     setInput("");
+    setIsLoading(true);
 
     try {
       const res = await postChat({ question, upload_id: uploadId });
@@ -64,6 +66,8 @@ export default function ChatWindow() {
           content: `**Error:** ${err.message || "Failed to fetch answer."}`,
         },
       ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,6 +82,23 @@ export default function ChatWindow() {
             <ChatMessage key={i} role={m.role} content={m.content} />
           ))
         )}
+        {isLoading && (
+          <div className="flex items-start gap-2">
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+              <span className="text-primary font-semibold text-sm">AI</span>
+            </div>
+            <div className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 py-3">
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                  <span className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                  <span className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                </div>
+                <span className="text-sm">Thinking...</span>
+              </div>
+            </div>
+          </div>
+        )}
         <div ref={endRef} />
       </div>
 
@@ -91,14 +112,14 @@ export default function ChatWindow() {
           placeholder={
             uploadId ? "Ask a question…" : "Upload a document first…"
           }
-          disabled={!uploadId}
+          disabled={!uploadId || isLoading}
           onKeyDown={(e) => e.key === "Enter" && sendQuestion()}
         />
         <button
           onClick={sendQuestion}
-          disabled={!uploadId || !input.trim()}
+          disabled={!uploadId || !input.trim() || isLoading}
           className={`flex items-center gap-2 px-4 rounded-xl transition font-semibold
-            ${!uploadId || !input.trim()
+            ${!uploadId || !input.trim() || isLoading
               ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
               : "bg-primary hover:bg-primary/90 text-white"
             }`}
