@@ -29,9 +29,9 @@ def _get_connection() -> Connection:
 def retrieve(question: str, upload_id: str, top_k: int = 5) -> List[str]:
     """Retrieve top-k relevant text chunks from the database."""
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/text-embedding-004",
+        model="models/gemini-embedding-001",
         google_api_key=GEMINI_API_KEY)
-    query_vec = embeddings.embed_query(question)
+    query_vec = embeddings.embed_query(question, output_dimensionality=768)
     conn = _get_connection()
     try:
         with conn:
@@ -57,7 +57,7 @@ def answer_question(question: str, upload_id: str) -> str:
     chunks = retrieve(question, upload_id)
     context = "\n".join(chunks)
     llm = GoogleGenerativeAI(
-        model="gemini-2.0-flash-lite",
+        model="gemini-flash-latest",
         google_api_key=GEMINI_API_KEY)
     prompt = (
         "You are a contract-savvy assistant. Use ONLY the following excerpts to answer:\n"

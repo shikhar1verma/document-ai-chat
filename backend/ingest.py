@@ -79,12 +79,12 @@ def ingest_file(file_path: str, filename: str, upload_id: str) -> None:
 
     # 3. Embeddings
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/text-embedding-004",
+        model="models/gemini-embedding-001",
         google_api_key=GEMINI_API_KEY,
     )
     texts: List[str] = [_sanitize(doc.page_content) for doc in chunks]
     update_progress(upload_id, "60% – generating embeddings")
-    vectors = embeddings.embed_documents(texts)
+    vectors = embeddings.embed_documents(texts, output_dimensionality=768)
 
     # 4. Insert rows
     conn = None

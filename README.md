@@ -1,4 +1,4 @@
-# 📄 Document AI Chat
+# Document AI Chat
 
 Chat with any PDF as if it were a knowledgeable assistant.  
 The project showcases a **Retrieval-Augmented Generation (RAG)** workflow built with FastAPI, PostgreSQL + pgvector, Google Gemini and a React / Next.js frontend.
@@ -9,7 +9,7 @@ The project showcases a **Retrieval-Augmented Generation (RAG)** workflow built 
 
 ---
 
-## ✨ Features
+## Features
 - **Document ingestion** – drag-and-drop a PDF; text is chunked and embedded with Gemini.
 - **Vector search** – pgvector extension stores embeddings and performs similarity lookup.
 - **RAG prompt construction** – top-k chunks are sent to Gemini Flashlight for an answer.
@@ -20,7 +20,7 @@ The project showcases a **Retrieval-Augmented Generation (RAG)** workflow built 
 
 ---
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 | Layer       | Tech                                         | Role                                                                    |
 |-------------|----------------------------------------------|-------------------------------------------------------------------------|
@@ -33,7 +33,7 @@ The project showcases a **Retrieval-Augmented Generation (RAG)** workflow built 
 
 ---
 
-## 🗂️ Repository Layout
+## Repository Layout
 
 * **backend/** 
   FastAPI app, Dockerfiles, SQL migrations & cron jobs
@@ -44,7 +44,7 @@ The project showcases a **Retrieval-Augmented Generation (RAG)** workflow built 
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Clone & configure
 ```bash
@@ -67,7 +67,7 @@ The UI will hot-reload on file changes; backend will reload via `uvicorn --reloa
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 | Variable            | Location        | Description                                |
 |---------------------|-----------------|--------------------------------------------|
@@ -77,7 +77,7 @@ The UI will hot-reload on file changes; backend will reload via `uvicorn --reloa
 
 ---
 
-## ⏱️ Cron & House-keeping
+## Cron & House-keeping
 A scheduled job (`backend/cron/cronjobs/clear-greater-than-7-days-data.sql`) deletes vectors older than 7 days to keep the demo database lean. Run it via `cron` or any scheduler:
 
 ```bash
@@ -86,7 +86,7 @@ psql "$DATABASE_URL" -f path/to/sql
 
 ---
 
-## 📦 Deployment
+## Deployment
 
 1. Build images
    ```bash
@@ -111,7 +111,7 @@ services:
 
 ---
 
-## 📝 License
+## License
 
 MIT © Shikhar Verma.  
 Educational prototype – no legal advice provided.
